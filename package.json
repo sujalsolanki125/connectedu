@@ -1,0 +1,37 @@
+{
+  "name": "alumni-mentor-hub",
+  "version": "1.0.0",
+  "description": "Alumni Mentorship Platform - Full Stack Application",
+  "private": true,
+  "scripts": {
+    "install:client": "cd client && npm install",
+    "install:server": "cd server && npm install",
+    "install:all": "npm run install:client && npm run install:server",
+    "start:client": "cd client && npm start",
+    "start:server": "cd server && npm start",
+    "dev:server": "cd server && npm run dev",
+    "build:client": "cd client && npm run build",
+    "start": "concurrently \"npm run start:server\" \"npm run start:client\"",
+    "dev": "concurrently \"npm run dev:server\" \"npm run start:client\"",
+    "heroku-postbuild": "cd client && npm install && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "your-repository-url"
+  },
+  "keywords": [
+    "alumni",
+    "mentorship",
+    "interview-experiences",
+    "MERN",
+    "React",
+    "Node.js",
+    "MongoDB",
+    "Express"
+  ],
+  "author": "Your Name",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

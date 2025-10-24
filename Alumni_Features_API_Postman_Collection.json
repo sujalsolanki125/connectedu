@@ -1,0 +1,575 @@
+{
+  "info": {
+    "name": "Alumni Features API",
+    "description": "Complete API collection for Alumni Features (Interview Experiences, Workshops, Achievements)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000/api",
+      "type": "string"
+    },
+    {
+      "key": "alumniToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "studentToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "alumniId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "experienceId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "workshopId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "bookingId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Login as Alumni",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('alumniToken', response.token);",
+                  "    pm.collectionVariables.set('alumniId', response._id);",
+                  "    console.log('Alumni Token saved:', response.token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"alumni@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Login as Student",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('studentToken', response.token);",
+                  "    console.log('Student Token saved:', response.token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"student@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Interview Experiences",
+      "item": [
+        {
+          "name": "Add Interview Experience",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('experienceId', response.data._id);",
+                  "    console.log('Experience ID saved:', response.data._id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{alumniToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"companyName\": \"Google\",\n  \"interviewRounds\": 4,\n  \"questionTypes\": [\"Technical\", \"HR\"],\n  \"questions\": [\n    {\n      \"questionText\": \"Explain closures in JavaScript\",\n      \"studentAnswer\": \"Closures are functions that have access to variables from their outer scope even after the outer function has returned.\",\n      \"expectedAnswer\": \"A closure is a function bundled together with references to its surrounding state (lexical environment).\",\n      \"roundType\": \"Technical\"\n    },\n    {\n      \"questionText\": \"Tell me about yourself\",\n      \"studentAnswer\": \"I am a software engineer with 3 years of experience...\",\n      \"roundType\": \"HR\"\n    }\n  ],\n  \"companyExpectations\": \"Strong problem-solving skills, good communication, and ability to work in a team.\",\n  \"tips\": \"Practice DSA daily on LeetCode, work on personal projects, and prepare for behavioral questions.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/alumni-features/interview-experience",
+              "host": ["{{baseUrl}}"],
+              "path": ["alumni-features", "interview-experience"]
+            }
+          }
+        },
+        {
+          "name": "Get All Interview Experiences",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/alumni-features/interview-experiences?limit=50&page=1",
+              "host": ["{{baseUrl}}"],
+              "path": ["alumni-features", "interview-experiences"],
+              "query": [
+                {
+                  "key": "companyName",
+                  "value": "Google",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "50"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get My Interview Experiences",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{alumniToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/alumni-features/my-interview-experiences",
+              "host": ["{{baseUrl}}"],
+              "path": ["alumni-features", "my-interview-experiences"]
+            }
+          }
+        },
+        {
+          "name": "Update Interview Experience",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{alumniToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tips\": \"Updated tips: Also practice system design and learn design patterns.\",\n  \"companyExpectations\": \"Updated expectations: Strong coding skills and scalability knowledge.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/alumni-features/interview-experience/{{experienceId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["alumni-features", "interview-experience", "{{experienceId}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Interview Experience",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{alumniToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/alumni-features/interview-experience/{{experienceId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["alumni-features", "interview-experience", "{{experienceId}}"]
+            }
+          }
+        },
+        {
+          "name": "Mark as Helpful (Student)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{studentToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"alumniId\": \"{{alumniId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/alumni-features/interview-experience/{{experienceId}}/helpful",
+              "host": ["{{baseUrl}}"],
+              "path": ["alumni-features", "interview-experience", "{{experienceId}}", "helpful"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Workshops & Mentorship",
+      "item": [
+        {
+          "name": "Create Workshop",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('workshopId', response.data._id);",
+                  "    console.log('Workshop ID saved:', response.data._id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{alumniToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mentorshipType\": [\"Mock Interview\", \"Career Guidance\"],\n  \"sessionMode\": [\"Online\", \"Video Call\"],\n  \"isPaidSession\": false,\n  \"availableDays\": [\"Saturday\", \"Sunday\"],\n  \"availableTime\": \"6 PM - 8 PM\",\n  \"description\": \"1-on-1 mock interviews with detailed feedback on technical skills, problem-solving approach, and communication.\",\n  \"maxParticipants\": 1,\n  \"duration\": 60\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/alumni-features/workshop",
+              "host": ["{{baseUrl}}"],
+              "path": ["alumni-features", "workshop"]
+            }
+          }
+        },
+        {
+          "name": "Get All Workshops",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/alumni-features/workshops",
+              "host": ["{{baseUrl}}"],
+              "path": ["alumni-features", "workshops"],
+              "query": [
+                {
+                  "key": "mentorshipType",
+                  "value": "Mock Interview",
+                  "disabled": true
+                },
+                {
+                  "key": "sessionMode",
+                  "value": "Online",
+                  "disabled": true
+                },
+                {
+                  "key": "isPaidSession",
+                  "value": "false",
+                  "disabled": true
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get My Workshops",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{alumniToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/alumni-features/my-workshops",
+              "host": ["{{baseUrl}}"],
+              "path": ["alumni-features", "my-workshops"]
+            }
+          }
+        },
+        {
+          "name": "Update Workshop",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{alumniToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"Updated description: Now including system design discussions and resume review.\",\n  \"duration\": 90\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/alumni-features/workshop/{{workshopId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["alumni-features", "workshop", "{{workshopId}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Workshop",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{alumniToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/alumni-features/workshop/{{workshopId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["alumni-features", "workshop", "{{workshopId}}"]
+            }
+          }
+        },
+        {
+          "name": "Book Workshop (Student)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    // Note: bookingId needs to be extracted from workshop bookings array",
+                  "    console.log('Booking created successfully');",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{studentToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"alumniId\": \"{{alumniId}}\",\n  \"scheduledDate\": \"2025-10-26\",\n  \"scheduledTime\": \"7 PM\",\n  \"notes\": \"I need help preparing for upcoming Google interview. Want to practice system design questions.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/alumni-features/workshop/{{workshopId}}/book",
+              "host": ["{{baseUrl}}"],
+              "path": ["alumni-features", "workshop", "{{workshopId}}", "book"]
+            }
+          }
+        },
+        {
+          "name": "Update Booking Status - Confirm",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{alumniToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"Confirmed\",\n  \"meetingLink\": \"https://meet.google.com/abc-xyz-123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/alumni-features/workshop/{{workshopId}}/booking/{{bookingId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["alumni-features", "workshop", "{{workshopId}}", "booking", "{{bookingId}}"]
+            }
+          }
+        },
+        {
+          "name": "Update Booking Status - Complete",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{alumniToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"Completed\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/alumni-features/workshop/{{workshopId}}/booking/{{bookingId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["alumni-features", "workshop", "{{workshopId}}", "booking", "{{bookingId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Achievements & Milestones",
+      "item": [
+        {
+          "name": "Submit Feedback (Student)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{studentToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"alumniId\": \"{{alumniId}}\",\n  \"rating\": 5,\n  \"comment\": \"Amazing session! Very insightful and helpful. The mock interview was challenging but gave me great perspective on what to expect. Highly recommend!\",\n  \"sessionType\": \"Mock Interview\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/alumni-features/feedback",
+              "host": ["{{baseUrl}}"],
+              "path": ["alumni-features", "feedback"]
+            }
+          }
+        },
+        {
+          "name": "Get Alumni Achievements",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/alumni-features/achievements/{{alumniId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["alumni-features", "achievements", "{{alumniId}}"]
+            }
+          }
+        },
+        {
+          "name": "Get My Achievements (Alumni)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{alumniToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/alumni-features/my-achievements",
+              "host": ["{{baseUrl}}"],
+              "path": ["alumni-features", "my-achievements"]
+            }
+          }
+        },
+        {
+          "name": "Get Leaderboard",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/alumni-features/leaderboard?limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["alumni-features", "leaderboard"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

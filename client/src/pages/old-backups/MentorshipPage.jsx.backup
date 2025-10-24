@@ -1,0 +1,714 @@
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+
+const MentorshipPage = () => {
+  const { userInfo } = useSelector((state) => state.auth);
+  
+  // View state for alumni: 'browse' or 'requests'
+  const [activeView, setActiveView] = useState('browse');
+  
+  // Search and filters
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filterCompany, setFilterCompany] = useState('');
+  const [filterCollege, setFilterCollege] = useState('');
+  const [filterExpertise, setFilterExpertise] = useState('');
+  
+  // Modals
+  const [showRequestModal, setShowRequestModal] = useState(false);
+  const [selectedAlumni, setSelectedAlumni] = useState(null);
+  const [showContactModal, setShowContactModal] = useState(false);
+  const [showRespondModal, setShowRespondModal] = useState(false);
+  const [selectedRequest, setSelectedRequest] = useState(null);
+  
+  // Request form state
+  const [requestType, setRequestType] = useState('');
+  const [requestMessage, setRequestMessage] = useState('');
+  const [responseMessage, setResponseMessage] = useState('');
+
+  // Mock data - Replace with actual API call
+  const mockSessions = [
+    {
+      _id: '1',
+      title: 'Resume Review & Career Guidance',
+      category: 'Career Guidance',
+      description: 'Get personalized feedback on your resume and career path advice from an experienced tech professional.',
+      mentor: {
+        name: 'Sarah Johnson',
+        avatar: '👩‍💼',
+        company: 'Google',
+        designation: 'Senior Software Engineer',
+        experience: '8 years',
+        rating: 4.9,
+        totalSessions: 156,
+      },
+      expertise: ['Resume Writing', 'Career Planning', 'Tech Industry', 'Interview Prep'],
+      duration: 45,
+      mode: 'Online (Google Meet)',
+      status: 'Available',
+      price: 'Free',
+      availableSlots: [
+        { _id: 's1', date: '2024-03-25', time: '10:00 AM', booked: false },
+        { _id: 's2', date: '2024-03-25', time: '2:00 PM', booked: false },
+        { _id: 's3', date: '2024-03-26', time: '11:00 AM', booked: false },
+      ],
+      tips: 'Bring your latest resume and a list of companies you are interested in.',
+      rating: 4.9,
+      totalReviews: 45,
+    },
+    {
+      _id: '2',
+      title: 'Data Structures & Algorithms Mastery',
+      category: 'Technical Interview Prep',
+      description: 'Master DSA concepts and problem-solving strategies for top tech company interviews.',
+      mentor: {
+        name: 'Rahul Sharma',
+        avatar: '👨‍💻',
+        company: 'Microsoft',
+        designation: 'Principal Engineer',
+        experience: '10 years',
+        rating: 5.0,
+        totalSessions: 203,
+      },
+      expertise: ['Data Structures', 'Algorithms', 'Problem Solving', 'Competitive Programming'],
+      duration: 60,
+      mode: 'Online (Zoom)',
+      status: 'Available',
+      price: 'Free',
+      availableSlots: [
+        { _id: 's4', date: '2024-03-24', time: '6:00 PM', booked: false },
+        { _id: 's5', date: '2024-03-25', time: '7:00 PM', booked: false },
+      ],
+      tips: 'Have LeetCode or HackerRank account ready. We will solve problems together.',
+      rating: 5.0,
+      totalReviews: 67,
+    },
+    {
+      _id: '3',
+      title: 'System Design Interview Preparation',
+      category: 'Technical Interview Prep',
+      description: 'Learn to design scalable systems and ace system design interviews at FAANG companies.',
+      mentor: {
+        name: 'Priya Patel',
+        avatar: '👩‍🔬',
+        company: 'Amazon',
+        designation: 'Staff Engineer',
+        experience: '12 years',
+        rating: 4.8,
+        totalSessions: 189,
+      },
+      expertise: ['System Design', 'Distributed Systems', 'Scalability', 'Architecture'],
+      duration: 90,
+      mode: 'Online (Microsoft Teams)',
+      status: 'Available',
+      price: 'Free',
+      availableSlots: [
+        { _id: 's6', date: '2024-03-27', time: '4:00 PM', booked: false },
+        { _id: 's7', date: '2024-03-28', time: '5:00 PM', booked: false },
+      ],
+      tips: 'Familiarize yourself with basics of load balancing, caching, and databases.',
+      rating: 4.8,
+      totalReviews: 52,
+    },
+    {
+      _id: '4',
+      title: 'Behavioral Interview Excellence',
+      category: 'Behavioral Interview Prep',
+      description: 'Master the art of behavioral interviews with STAR method and real-world examples.',
+      mentor: {
+        name: 'David Chen',
+        avatar: '👨‍🎓',
+        company: 'Meta',
+        designation: 'Engineering Manager',
+        experience: '9 years',
+        rating: 4.7,
+        totalSessions: 134,
+      },
+      expertise: ['STAR Method', 'Leadership', 'Conflict Resolution', 'Communication'],
+      duration: 45,
+      mode: 'Online (Google Meet)',
+      status: 'Available',
+      price: 'Free',
+      availableSlots: [
+        { _id: 's8', date: '2024-03-26', time: '3:00 PM', booked: false },
+        { _id: 's9', date: '2024-03-27', time: '10:00 AM', booked: false },
+      ],
+      tips: 'Prepare 2-3 stories from your experience using the STAR method.',
+      rating: 4.7,
+      totalReviews: 38,
+    },
+    {
+      _id: '5',
+      title: 'Frontend Development & React Mastery',
+      category: 'Skill Development',
+      description: 'Deep dive into modern frontend development, React best practices, and performance optimization.',
+      mentor: {
+        name: 'Emily Rodriguez',
+        avatar: '👩‍💻',
+        company: 'Netflix',
+        designation: 'Senior Frontend Engineer',
+        experience: '7 years',
+        rating: 4.9,
+        totalSessions: 178,
+      },
+      expertise: ['React', 'JavaScript', 'TypeScript', 'Performance', 'UI/UX'],
+      duration: 60,
+      mode: 'Online (Zoom)',
+      status: 'Available',
+      price: 'Free',
+      availableSlots: [
+        { _id: 's10', date: '2024-03-25', time: '5:00 PM', booked: false },
+        { _id: 's11', date: '2024-03-26', time: '6:00 PM', booked: false },
+      ],
+      tips: 'Share your GitHub repo or project you want to discuss.',
+      rating: 4.9,
+      totalReviews: 56,
+    },
+    {
+      _id: '6',
+      title: 'Product Management Career Path',
+      category: 'Career Guidance',
+      description: 'Transition into product management or level up your PM skills with industry insights.',
+      mentor: {
+        name: 'Michael Thompson',
+        avatar: '👨‍💼',
+        company: 'Apple',
+        designation: 'Senior Product Manager',
+        experience: '11 years',
+        rating: 4.8,
+        totalSessions: 142,
+      },
+      expertise: ['Product Strategy', 'Roadmapping', 'User Research', 'Stakeholder Management'],
+      duration: 45,
+      mode: 'Online (Google Meet)',
+      status: 'Available',
+      price: 'Free',
+      availableSlots: [
+        { _id: 's12', date: '2024-03-28', time: '11:00 AM', booked: false },
+        { _id: 's13', date: '2024-03-29', time: '2:00 PM', booked: false },
+      ],
+      tips: 'Think about products you love and why. Be ready to discuss them.',
+      rating: 4.8,
+      totalReviews: 41,
+    },
+  ];
+
+  useEffect(() => {
+    // Simulate API call
+    setTimeout(() => {
+      setSessions(mockSessions);
+      setFilteredSessions(mockSessions);
+      setLoading(false);
+    }, 1000);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    filterSessions();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedCategory, selectedStatus, searchTerm, sessions]);
+
+  const filterSessions = () => {
+    let filtered = [...sessions];
+
+    // Search filter
+    if (searchTerm) {
+      filtered = filtered.filter(
+        (session) =>
+          session.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          session.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          session.mentor.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          session.expertise.some((skill) => skill.toLowerCase().includes(searchTerm.toLowerCase()))
+      );
+    }
+
+    // Category filter
+    if (selectedCategory !== 'all') {
+      filtered = filtered.filter((session) => session.category === selectedCategory);
+    }
+
+    // Status filter
+    if (selectedStatus !== 'all') {
+      filtered = filtered.filter((session) => session.status === selectedStatus);
+    }
+
+    setFilteredSessions(filtered);
+  };
+
+  const categories = ['all', ...new Set(mockSessions.map((s) => s.category))];
+  const statuses = ['all', 'Available', 'Scheduled', 'Completed'];
+
+  const openBookingModal = (session) => {
+    setSelectedSession(session);
+    setSelectedSlot(null);
+    setBookingMessage('');
+    setShowBookingModal(true);
+  };
+
+  const closeBookingModal = () => {
+    setShowBookingModal(false);
+    setSelectedSession(null);
+    setSelectedSlot(null);
+    setBookingMessage('');
+  };
+
+  const handleBookSession = () => {
+    if (!selectedSlot) {
+      alert('Please select a time slot');
+      return;
+    }
+
+    // Simulate booking API call
+    setTimeout(() => {
+      alert(`Session booked successfully!\n\nMentor: ${selectedSession.mentor.name}\nDate: ${selectedSlot.date}\nTime: ${selectedSlot.time}\n\nYou'll receive a confirmation email shortly.`);
+      closeBookingModal();
+    }, 500);
+  };
+
+  const getCategoryIcon = (category) => {
+    const icons = {
+      'Career Guidance': '🎯',
+      'Technical Interview Prep': '💻',
+      'Behavioral Interview Prep': '🗣️',
+      'Skill Development': '📚',
+      'Resume Review': '📄',
+      'Project Discussion': '🚀',
+      'General Mentorship': '🤝',
+    };
+    return icons[category] || '📌';
+  };
+
+  const getCategoryGradient = (category) => {
+    const gradients = {
+      'Career Guidance': 'from-blue-500 to-cyan-500',
+      'Technical Interview Prep': 'from-purple-500 to-pink-500',
+      'Behavioral Interview Prep': 'from-green-500 to-teal-500',
+      'Skill Development': 'from-orange-500 to-red-500',
+      'Resume Review': 'from-indigo-500 to-purple-500',
+      'Project Discussion': 'from-pink-500 to-rose-500',
+      'General Mentorship': 'from-primary-500 to-secondary-500',
+    };
+    return gradients[category] || 'from-gray-500 to-gray-700';
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-purple-50">
+      {/* Header */}
+      <div className="bg-gradient-to-r from-primary-600 via-purple-600 to-secondary-500 text-white py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+            <div className="flex-1">
+              <h1 className="text-4xl font-extrabold mb-2 animate-fade-in">
+                🎓 Mentorship Sessions
+              </h1>
+              <p className="text-purple-100 text-lg animate-fade-in">
+                Connect with experienced alumni mentors for personalized guidance
+              </p>
+            </div>
+            {(userInfo?.role === 'alumni' || userInfo?.role === 'admin') && (
+              <Link
+                to="/mentorship/create"
+                className="mt-4 md:mt-0 px-6 py-3 bg-white text-primary-600 rounded-full font-bold shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 inline-flex items-center"
+              >
+                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+                Offer Mentorship
+              </Link>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Search and Filters */}
+        <div className="bg-white rounded-2xl shadow-xl p-6 mb-8 animate-fade-in">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* Search */}
+            <div className="lg:col-span-2">
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </div>
+                <input
+                  type="text"
+                  placeholder="Search by mentor, expertise, topic..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary-500 focus:ring-4 focus:ring-primary-100 transition-all duration-200 outline-none"
+                />
+              </div>
+            </div>
+
+            {/* Category Filter */}
+            <div>
+              <select
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary-500 focus:ring-4 focus:ring-primary-100 transition-all duration-200 outline-none appearance-none bg-white cursor-pointer"
+              >
+                {categories.map((category) => (
+                  <option key={category} value={category}>
+                    {category === 'all' ? 'All Categories' : category}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Status Filter */}
+            <div>
+              <select
+                value={selectedStatus}
+                onChange={(e) => setSelectedStatus(e.target.value)}
+                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary-500 focus:ring-4 focus:ring-primary-100 transition-all duration-200 outline-none appearance-none bg-white cursor-pointer"
+              >
+                {statuses.map((status) => (
+                  <option key={status} value={status}>
+                    {status === 'all' ? 'All Status' : status}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* Results Count */}
+          <div className="mt-4 flex items-center justify-between text-sm text-gray-600">
+            <p>
+              Showing <span className="font-bold text-primary-600">{filteredSessions.length}</span> of{' '}
+              <span className="font-bold">{sessions.length}</span> sessions
+            </p>
+            {searchTerm && (
+              <button
+                onClick={() => setSearchTerm('')}
+                className="text-primary-600 hover:text-primary-700 font-medium"
+              >
+                Clear search
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Loading State */}
+        {loading ? (
+          <div className="flex flex-col items-center justify-center py-20">
+            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primary-600"></div>
+            <p className="mt-4 text-gray-600 font-medium">Loading mentorship sessions...</p>
+          </div>
+        ) : filteredSessions.length === 0 ? (
+          /* Empty State */
+          <div className="text-center py-20">
+            <div className="text-6xl mb-4">🔍</div>
+            <h3 className="text-2xl font-bold text-gray-900 mb-2">No sessions found</h3>
+            <p className="text-gray-600 mb-6">Try adjusting your search or filters</p>
+            <button
+              onClick={() => {
+                setSearchTerm('');
+                setSelectedCategory('all');
+                setSelectedStatus('all');
+              }}
+              className="px-6 py-3 bg-primary-600 text-white rounded-xl font-bold hover:bg-primary-700 transition-colors duration-200"
+            >
+              Reset Filters
+            </button>
+          </div>
+        ) : (
+          /* Session Cards Grid */
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {filteredSessions.map((session, index) => (
+              <div
+                key={session._id}
+                className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden animate-fade-in"
+                style={{ animationDelay: `${index * 50}ms` }}
+              >
+                {/* Card Header */}
+                <div className={`bg-gradient-to-r ${getCategoryGradient(session.category)} p-6`}>
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="flex items-center">
+                      <div className="text-4xl mr-3">{getCategoryIcon(session.category)}</div>
+                      <div>
+                        <h3 className="text-xl font-bold text-white">{session.title}</h3>
+                        <p className="text-sm text-white text-opacity-90">{session.category}</p>
+                      </div>
+                    </div>
+                    <span className="px-3 py-1 bg-green-500 text-white text-xs font-bold rounded-full">
+                      {session.status}
+                    </span>
+                  </div>
+
+                  {/* Mentor Info */}
+                  <div className="bg-white bg-opacity-20 backdrop-blur-sm rounded-xl p-4">
+                    <div className="flex items-center">
+                      <div className="text-4xl mr-3">{session.mentor.avatar}</div>
+                      <div className="flex-1">
+                        <h4 className="text-white font-bold">{session.mentor.name}</h4>
+                        <p className="text-white text-opacity-90 text-sm">
+                          {session.mentor.designation} at {session.mentor.company}
+                        </p>
+                        <div className="flex items-center mt-1">
+                          <div className="flex items-center mr-3">
+                            <svg className="w-4 h-4 text-yellow-300 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                            <span className="text-white text-sm font-bold">{session.mentor.rating}</span>
+                          </div>
+                          <span className="text-white text-opacity-90 text-sm">
+                            {session.mentor.totalSessions} sessions
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Card Body */}
+                <div className="p-6">
+                  {/* Description */}
+                  <p className="text-gray-700 mb-4 leading-relaxed">{session.description}</p>
+
+                  {/* Session Details */}
+                  <div className="grid grid-cols-2 gap-3 mb-4">
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                      <div className="flex items-center text-blue-700">
+                        <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <div>
+                          <p className="text-xs text-blue-600">Duration</p>
+                          <p className="font-bold">{session.duration} min</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="bg-purple-50 border border-purple-200 rounded-lg p-3">
+                      <div className="flex items-center text-purple-700">
+                        <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                        </svg>
+                        <div>
+                          <p className="text-xs text-purple-600">Mode</p>
+                          <p className="font-bold text-sm">{session.mode.split(' ')[0]}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Expertise Tags */}
+                  <div className="mb-4">
+                    <p className="text-xs text-gray-500 font-medium mb-2">Expertise Areas:</p>
+                    <div className="flex flex-wrap gap-2">
+                      {session.expertise.map((skill, idx) => (
+                        <span
+                          key={idx}
+                          className="px-3 py-1 bg-gradient-to-r from-primary-50 to-purple-50 border border-primary-200 text-primary-700 text-xs rounded-full font-medium"
+                        >
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Tips */}
+                  {session.tips && (
+                    <div className="bg-yellow-50 border-l-4 border-yellow-400 p-3 mb-4 rounded-r-lg">
+                      <div className="flex items-start">
+                        <svg className="w-5 h-5 text-yellow-600 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                        </svg>
+                        <div>
+                          <p className="text-xs text-yellow-800 font-bold mb-1">Pro Tip:</p>
+                          <p className="text-sm text-yellow-700">{session.tips}</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Available Slots Count */}
+                  <div className="flex items-center justify-between mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                    <div className="flex items-center text-green-700">
+                      <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      <span className="text-sm font-medium">
+                        {session.availableSlots.length} slots available
+                      </span>
+                    </div>
+                    <span className="text-green-700 font-bold text-lg">{session.price}</span>
+                  </div>
+
+                  {/* Action Button */}
+                  {userInfo?.role === 'student' && session.status === 'Available' ? (
+                    <button
+                      onClick={() => openBookingModal(session)}
+                      className="w-full py-3 bg-gradient-to-r from-primary-600 to-purple-600 text-white rounded-xl font-bold hover:shadow-lg transform hover:scale-105 transition-all duration-200 flex items-center justify-center group"
+                    >
+                      <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      Book This Session
+                      <svg
+                        className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-200"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </button>
+                  ) : (
+                    <div className="w-full py-3 bg-gray-100 text-gray-500 rounded-xl font-bold text-center">
+                      {session.status === 'Scheduled' ? '✓ Scheduled' : 'Not Available'}
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Booking Modal */}
+      {showBookingModal && selectedSession && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 animate-fade-in">
+          <div className="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+            {/* Modal Header */}
+            <div className={`sticky top-0 bg-gradient-to-r ${getCategoryGradient(selectedSession.category)} text-white p-6 rounded-t-3xl`}>
+              <div className="flex items-start justify-between">
+                <div>
+                  <h2 className="text-2xl font-extrabold mb-1">{selectedSession.title}</h2>
+                  <p className="text-white text-opacity-90">with {selectedSession.mentor.name}</p>
+                </div>
+                <button
+                  onClick={closeBookingModal}
+                  className="text-white hover:bg-white hover:bg-opacity-20 rounded-full p-2 transition-colors duration-200"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-6">
+              {/* Mentor Details */}
+              <div className="bg-gradient-to-br from-purple-50 to-blue-50 border-2 border-purple-200 rounded-2xl p-5 mb-6">
+                <div className="flex items-center mb-3">
+                  <div className="text-5xl mr-4">{selectedSession.mentor.avatar}</div>
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-900">{selectedSession.mentor.name}</h3>
+                    <p className="text-gray-600">{selectedSession.mentor.designation}</p>
+                    <p className="text-primary-600 font-semibold">{selectedSession.mentor.company}</p>
+                  </div>
+                </div>
+                <div className="grid grid-cols-3 gap-3 text-center">
+                  <div className="bg-white rounded-lg p-2">
+                    <p className="text-2xl font-bold text-primary-600">{selectedSession.mentor.rating}</p>
+                    <p className="text-xs text-gray-600">Rating</p>
+                  </div>
+                  <div className="bg-white rounded-lg p-2">
+                    <p className="text-2xl font-bold text-purple-600">{selectedSession.mentor.totalSessions}</p>
+                    <p className="text-xs text-gray-600">Sessions</p>
+                  </div>
+                  <div className="bg-white rounded-lg p-2">
+                    <p className="text-2xl font-bold text-blue-600">{selectedSession.mentor.experience}</p>
+                    <p className="text-xs text-gray-600">Experience</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Session Info */}
+              <div className="mb-6">
+                <h3 className="text-lg font-bold text-gray-900 mb-3">Session Details</h3>
+                <div className="space-y-2 text-gray-700">
+                  <p className="flex items-center">
+                    <svg className="w-5 h-5 mr-2 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <strong className="mr-2">Duration:</strong> {selectedSession.duration} minutes
+                  </p>
+                  <p className="flex items-center">
+                    <svg className="w-5 h-5 mr-2 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    </svg>
+                    <strong className="mr-2">Mode:</strong> {selectedSession.mode}
+                  </p>
+                  <p className="flex items-center">
+                    <svg className="w-5 h-5 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <strong className="mr-2">Price:</strong> {selectedSession.price}
+                  </p>
+                </div>
+              </div>
+
+              {/* Available Slots */}
+              <div className="mb-6">
+                <h3 className="text-lg font-bold text-gray-900 mb-3">Select a Time Slot</h3>
+                <div className="grid grid-cols-1 gap-3">
+                  {selectedSession.availableSlots.map((slot) => (
+                    <button
+                      key={slot._id}
+                      onClick={() => setSelectedSlot(slot)}
+                      className={`p-4 border-2 rounded-xl transition-all duration-200 text-left ${
+                        selectedSlot?._id === slot._id
+                          ? 'border-primary-500 bg-primary-50 shadow-md'
+                          : 'border-gray-200 hover:border-primary-300 hover:bg-gray-50'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center">
+                          <svg className="w-5 h-5 mr-3 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                          </svg>
+                          <div>
+                            <p className="font-bold text-gray-900">{slot.date}</p>
+                            <p className="text-sm text-gray-600">{slot.time}</p>
+                          </div>
+                        </div>
+                        {selectedSlot?._id === slot._id && (
+                          <svg className="w-6 h-6 text-primary-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                          </svg>
+                        )}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Message to Mentor */}
+              <div className="mb-6">
+                <label className="block text-sm font-bold text-gray-900 mb-2">
+                  Message to Mentor (Optional)
+                </label>
+                <textarea
+                  value={bookingMessage}
+                  onChange={(e) => setBookingMessage(e.target.value)}
+                  rows="3"
+                  placeholder="Share what you'd like to discuss or any specific questions..."
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary-500 focus:ring-4 focus:ring-primary-100 transition-all duration-200 outline-none resize-none"
+                ></textarea>
+              </div>
+
+              {/* Confirmation Button */}
+              <button
+                onClick={handleBookSession}
+                disabled={!selectedSlot}
+                className={`w-full py-4 rounded-xl font-bold text-white text-lg transition-all duration-200 ${
+                  selectedSlot
+                    ? 'bg-gradient-to-r from-green-500 to-emerald-500 hover:shadow-lg transform hover:scale-105'
+                    : 'bg-gray-300 cursor-not-allowed'
+                }`}
+              >
+                {selectedSlot ? '✓ Confirm Booking' : 'Select a time slot to continue'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default MentorshipPage;

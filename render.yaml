@@ -1,0 +1,26 @@
+# Render.com deployment configuration
+
+# Backend Service (server/)
+services:
+  - type: web
+    name: alumni-connect-backend
+    env: node
+    region: oregon
+    buildCommand: cd server && npm install
+    startCommand: cd server && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      # Add other environment variables from .env.example
+
+# Frontend Service (client/)
+  - type: static
+    name: alumni-connect-frontend
+    env: static
+    buildCommand: cd client && npm install && npm run build
+    staticPublishPath: ./client/build
+    envVars:
+      - key: REACT_APP_API_URL
+        value: https://alumni-connect-backend.onrender.com
