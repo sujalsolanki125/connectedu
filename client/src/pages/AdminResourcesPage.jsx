@@ -35,7 +35,7 @@ const AdminResourcesPage = () => {
         },
       };
 
-      const response = await axios.get('http://localhost:5000/api/resources/admin/all', config);
+      const response = await axios.get('${process.env.BACKEND_URL}/api/resources/admin/all', config);
       setResources(response.data);
       setLoading(false);
     } catch (error) {
@@ -73,7 +73,7 @@ const AdminResourcesPage = () => {
       };
 
       await axios.put(
-        `http://localhost:5000/api/resources/admin/${resourceId}/verify`,
+        `${process.env.BACKEND_URL}/api/resources/admin/${resourceId}/verify`,
         { isVerified: true },
         config
       );
@@ -105,7 +105,7 @@ const AdminResourcesPage = () => {
       };
 
       await axios.put(
-        `http://localhost:5000/api/resources/admin/${resourceId}/verify`,
+        `${process.env.BACKEND_URL}/api/resources/admin/${resourceId}/verify`,
         { isVerified: false },
         config
       );
@@ -136,7 +136,7 @@ const AdminResourcesPage = () => {
         },
       };
 
-      await axios.delete(`http://localhost:5000/api/resources/${resourceId}`, config);
+      await axios.delete(`${process.env.BACKEND_URL}/api/resources/${resourceId}`, config);
 
       alert('Resource deleted successfully!');
       fetchResources();
@@ -155,7 +155,7 @@ const AdminResourcesPage = () => {
       const token = userInfo.token;
       
       // Use the proxy download endpoint that handles filename properly
-      const downloadUrl = `http://localhost:5000/api/resources/${resource._id}/download-file`;
+      const downloadUrl = `${process.env.BACKEND_URL}/api/resources/${resource._id}/download-file`;
       
       // Add authorization header via fetch and blob download
       const response = await fetch(downloadUrl, {

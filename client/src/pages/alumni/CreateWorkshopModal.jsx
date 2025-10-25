@@ -103,7 +103,7 @@ const CreateWorkshopModal = ({ isOpen, onClose, onWorkshopCreated }) => {
       
       
       const response = await axios.post(
-        'http://localhost:5000/api/alumni-features/workshop',
+        '${process.env.BACKEND_URL}/api/alumni-features/workshop',
         processedData,
         {
           headers: {

@@ -79,7 +79,7 @@ const AddExperienceModal = ({ isOpen, onClose, onSuccess }) => {
       
       
       const response = await axios.post(
-        'http://localhost:5000/api/alumni-features/interview-experience',
+        '${process.env.BACKEND_URL}/api/alumni-features/interview-experience',
         formData,
         { headers: { Authorization: `Bearer ${token}` } }
       );

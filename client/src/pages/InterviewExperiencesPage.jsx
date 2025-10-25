@@ -38,8 +38,8 @@ const InterviewExperiencesPage = () => {
 
       // Add search query parameter if provided
       const url = companyName 
-        ? `http://localhost:5000/api/interviews?company=${encodeURIComponent(companyName)}`
-        : 'http://localhost:5000/api/interviews';
+        ? `${process.env.BACKEND_URL}/api/interviews?company=${encodeURIComponent(companyName)}`
+        : '${process.env.BACKEND_URL}/api/interviews';
 
       const response = await axios.get(url, config);
       setExperiences(response.data);
@@ -93,7 +93,7 @@ const InterviewExperiencesPage = () => {
 
       // Send request to backend
       const response = await axios.put(
-        `http://localhost:5000/api/interviews/${experienceId}/helpful`, 
+        `${process.env.BACKEND_URL}/api/interviews/${experienceId}/helpful`, 
         {}, 
         config
       );

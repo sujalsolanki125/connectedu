@@ -32,7 +32,7 @@ const MyWorkshops = () => {
       
       
       const response = await axios.get(
-        'http://localhost:5000/api/alumni-features/my-workshops',
+        '${process.env.BACKEND_URL}/api/alumni-features/my-workshops',
         {
           headers: {
             Authorization: `Bearer ${token}`
@@ -111,7 +111,7 @@ const MyWorkshops = () => {
     try {
       const token = localStorage.getItem('token');
       await axios.delete(
-        `http://localhost:5000/api/alumni-features/workshop/${workshopId}`,
+        `${process.env.BACKEND_URL}/api/alumni-features/workshop/${workshopId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`

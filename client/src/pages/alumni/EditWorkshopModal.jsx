@@ -117,7 +117,7 @@ const EditWorkshopModal = ({ isOpen, onClose, workshop, onWorkshopUpdated }) => 
       };
 
       const response = await axios.put(
-        `http://localhost:5000/api/alumni-features/workshop/${workshop._id}`,
+        `${process.env.BACKEND_URL}/api/alumni-features/workshop/${workshop._id}`,
         processedData,
         {
           headers: {

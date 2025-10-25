@@ -48,7 +48,7 @@ const StudentDashboard = () => {
           headers: { Authorization: `Bearer ${token}` }
         };
 
-        const response = await axios.get('http://localhost:5000/api/profile/me', config);
+        const response = await axios.get('${process.env.BACKEND_URL}/api/profile/me', config);
         setStudentProfile(response.data);
       } catch (error) {
         // Error handled silently - user will see empty profile state
@@ -87,8 +87,8 @@ const StudentDashboard = () => {
       const config = { headers: { Authorization: `Bearer ${token}` } };
 
       const [alumniRes, leaderboardRes] = await Promise.all([
-        axios.get('http://localhost:5000/api/users/alumni', config),
-        axios.get('http://localhost:5000/api/leaderboard?limit=1000', config),
+        axios.get('${process.env.BACKEND_URL}/api/users/alumni', config),
+        axios.get('${process.env.BACKEND_URL}/api/leaderboard?limit=1000', config),
       ]);
 
       const alumniData = alumniRes.data || [];
@@ -119,7 +119,7 @@ const StudentDashboard = () => {
       const token = localStorage.getItem('token') || userInfo?.token;
       const config = { headers: { Authorization: `Bearer ${token}` } };
       
-      const response = await axios.get('http://localhost:5000/api/mentorship-requests/student', config);
+      const response = await axios.get('${process.env.BACKEND_URL}/api/mentorship-requests/student', config);
       
       // Create a Set of alumni IDs who have pending requests
       const pendingAlumniIds = new Set(
@@ -161,7 +161,7 @@ const StudentDashboard = () => {
       const token = localStorage.getItem('token') || userInfo?.token;
       const config = { headers: { Authorization: `Bearer ${token}` } };
 
-      const response = await axios.get('http://localhost:5000/api/alumni-features/workshops', config);
+      const response = await axios.get('${process.env.BACKEND_URL}/api/alumni-features/workshops', config);
       const workshopData = response.data?.data || [];
       setWorkshops(workshopData);
       setFilteredWorkshops(workshopData);
@@ -198,7 +198,7 @@ const StudentDashboard = () => {
       const token = localStorage.getItem('token') || userInfo?.token;
       const config = { headers: { Authorization: `Bearer ${token}` } };
       
-      const response = await axios.get('http://localhost:5000/api/alumni-features/my-bookings', config);
+      const response = await axios.get('${process.env.BACKEND_URL}/api/alumni-features/my-bookings', config);
       
       const bookingData = response.data?.data || [];
       setBookings(bookingData);
@@ -223,7 +223,7 @@ const StudentDashboard = () => {
       };
 
       const response = await axios.post(
-        `http://localhost:5000/api/alumni-features/workshop/${workshop._id}/book`,
+        `${process.env.BACKEND_URL}/api/alumni-features/workshop/${workshop._id}/book`,
         bookingData,
         config
       );

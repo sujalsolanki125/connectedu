@@ -86,7 +86,7 @@ const CompleteStudentProfile = () => {
       };
 
       const { data } = await axios.get(
-        `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/profile/student`,
+        `${process.env.REACT_APP_API_URL || '${process.env.BACKEND_URL}'}/api/profile/student`,
         config
       );
 
@@ -161,7 +161,7 @@ const CompleteStudentProfile = () => {
       };
 
       const { data } = await axios.put(
-        `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/profile/student`,
+        `${process.env.REACT_APP_API_URL || '${process.env.BACKEND_URL}'}/api/profile/student`,
         profileData,
         config
       );

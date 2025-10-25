@@ -22,15 +22,15 @@ async function testRatingAPI() {
 
   try {
     // Test 1: Root endpoint
-    console.log('Test 1: GET http://localhost:5000/');
-    const rootResponse = await makeRequest('http://localhost:5000/');
+    console.log('Test 1: GET ${process.env.BACKEND_URL}/');
+    const rootResponse = await makeRequest('${process.env.BACKEND_URL}/');
     console.log('✅ Success! Status:', rootResponse.status);
     console.log('Response:', JSON.stringify(rootResponse.data, null, 2));
     console.log('\n');
 
     // Test 2: Platform Statistics (Public endpoint)
-    console.log('Test 2: GET http://localhost:5000/api/ratings/stats/platform');
-    const statsResponse = await makeRequest('http://localhost:5000/api/ratings/stats/platform');
+    console.log('Test 2: GET ${process.env.BACKEND_URL}/api/ratings/stats/platform');
+    const statsResponse = await makeRequest('${process.env.BACKEND_URL}/api/ratings/stats/platform');
     console.log('✅ Success! Status:', statsResponse.status);
     console.log('Response:', JSON.stringify(statsResponse.data, null, 2));
     console.log('\n');

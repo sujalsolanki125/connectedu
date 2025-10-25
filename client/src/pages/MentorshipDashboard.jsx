@@ -70,7 +70,7 @@ const MentorshipDashboard = () => {
       const token = localStorage.getItem('token');
       
       const response = await axios.get(
-        `http://localhost:5000/api/mentorship-requests/alumni?status=${activeTab}`,
+        `${process.env.BACKEND_URL}/api/mentorship-requests/alumni?status=${activeTab}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -90,7 +90,7 @@ const MentorshipDashboard = () => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.get(
-        'http://localhost:5000/api/mentorship-requests/alumni/stats',
+        '${process.env.BACKEND_URL}/api/mentorship-requests/alumni/stats',
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -140,7 +140,7 @@ const MentorshipDashboard = () => {
     try {
       const token = localStorage.getItem('token');
       await axios.put(
-        `http://localhost:5000/api/mentorship-requests/${selectedRequest._id}/accept`,
+        `${process.env.BACKEND_URL}/api/mentorship-requests/${selectedRequest._id}/accept`,
         {
           responseMessage,
           meetingLink,
@@ -172,7 +172,7 @@ const MentorshipDashboard = () => {
     try {
       const token = localStorage.getItem('token');
       await axios.put(
-        `http://localhost:5000/api/mentorship-requests/${selectedRequest._id}/reject`,
+        `${process.env.BACKEND_URL}/api/mentorship-requests/${selectedRequest._id}/reject`,
         {
           rejectionReason,
         },

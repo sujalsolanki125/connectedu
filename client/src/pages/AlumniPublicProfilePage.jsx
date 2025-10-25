@@ -27,7 +27,7 @@ const AlumniPublicProfilePage = () => {
 
       // Fetch alumni profile
       const { data } = await axios.get(
-        `http://localhost:5000/api/users/${id}`,
+        `${process.env.BACKEND_URL}/api/users/${id}`,
         config
       );
 
@@ -36,7 +36,7 @@ const AlumniPublicProfilePage = () => {
       // Fetch leaderboard rank
       try {
         const leaderboardRes = await axios.get(
-          `http://localhost:5000/api/leaderboard?limit=1000`,
+          `${process.env.BACKEND_URL}/api/leaderboard?limit=1000`,
           config
         );
         

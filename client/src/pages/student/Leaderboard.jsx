@@ -17,7 +17,7 @@ const Leaderboard = () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        'http://localhost:5000/api/alumni-features/leaderboard'
+        '${process.env.BACKEND_URL}/api/alumni-features/leaderboard'
       );
       setLeaderboard(response.data.leaderboard || []);
       setError('');

@@ -43,7 +43,7 @@ const RegisterGoogle = () => {
     try {
       
       
-      const { data } = await axios.post('http://localhost:5000/api/auth/register-google', {
+      const { data } = await axios.post('${process.env.BACKEND_URL}/api/auth/register-google', {
         tempUserId: userData.tempUserId,
         role,
       });

@@ -21,7 +21,7 @@ const GoogleAuthCallback = () => {
         const payload = JSON.parse(atob(token.split('.')[1]));
         
         // Fetch full user profile
-        fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/auth/profile`, {
+        fetch(`${process.env.REACT_APP_API_URL || '${process.env.BACKEND_URL}'}/api/auth/profile`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

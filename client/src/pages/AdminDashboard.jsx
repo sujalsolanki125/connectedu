@@ -61,12 +61,12 @@ const AdminDashboard = () => {
 
       // Fetch all data in parallel with individual error handling
       const [usersRes, statsRes, leaderboardRes, mentorshipRes, interviewRes, resourcesRes] = await Promise.allSettled([
-        axios.get('http://localhost:5000/api/users', config),
-        axios.get('http://localhost:5000/api/users/stats', config),
-        axios.get('http://localhost:5000/api/leaderboard?limit=100', config),
-        axios.get('http://localhost:5000/api/mentorship-requests', config),
-        axios.get('http://localhost:5000/api/interviews', config),
-        axios.get('http://localhost:5000/api/placement-resources', config),
+        axios.get('${process.env.BACKEND_URL}/api/users', config),
+        axios.get('${process.env.BACKEND_URL}/api/users/stats', config),
+        axios.get('${process.env.BACKEND_URL}/api/leaderboard?limit=100', config),
+        axios.get('${process.env.BACKEND_URL}/api/mentorship-requests', config),
+        axios.get('${process.env.BACKEND_URL}/api/interviews', config),
+        axios.get('${process.env.BACKEND_URL}/api/placement-resources', config),
       ]);
 
       // Extract data from settled promises
@@ -316,7 +316,7 @@ const AdminDashboard = () => {
       const token = localStorage.getItem('token') || userInfo?.token;
       const config = { headers: { Authorization: `Bearer ${token}` } };
       
-      await axios.delete(`http://localhost:5000/api/users/${userToDelete._id}`, config);
+      await axios.delete(`${process.env.BACKEND_URL}/api/users/${userToDelete._id}`, config);
       
       setUsers(users.filter((u) => u._id !== userToDelete._id));
       setShowDeleteModal(false);
@@ -337,7 +337,7 @@ const AdminDashboard = () => {
         // Delete all selected users
         await Promise.all(
           selectedUsers.map(userId => 
-            axios.delete(`http://localhost:5000/api/users/${userId}`, config)
+            axios.delete(`${process.env.BACKEND_URL}/api/users/${userId}`, config)
           )
         );
         
@@ -361,7 +361,7 @@ const AdminDashboard = () => {
       
       // Update user status
       await axios.put(
-        `http://localhost:5000/api/users/profile`,
+        `${process.env.BACKEND_URL}/api/users/profile`,
         { isActive: newStatus === 'active' },
         config
       );

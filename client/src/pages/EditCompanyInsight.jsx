@@ -58,7 +58,7 @@ const EditCompanyInsight = () => {
         setLoading(true);
         const token = localStorage.getItem('token');
         const response = await axios.get(
-          `http://localhost:5000/api/company-insights/${id}`,
+          `${process.env.BACKEND_URL}/api/company-insights/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -171,7 +171,7 @@ const EditCompanyInsight = () => {
       };
 
       await axios.put(
-        `http://localhost:5000/api/company-insights/${id}`,
+        `${process.env.BACKEND_URL}/api/company-insights/${id}`,
         dataToSend,
         {
           headers: {

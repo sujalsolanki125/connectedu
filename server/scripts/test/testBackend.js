@@ -7,7 +7,7 @@ const testBackend = async () => {
     
     // Test 1: Check if server is running
     try {
-      const response = await axios.get('http://localhost:5000');
+      const response = await axios.get('${process.env.BACKEND_URL}');
       console.log('✅ Backend server is running!');
     } catch (error) {
       console.log('❌ Backend server is NOT running!');
@@ -16,7 +16,7 @@ const testBackend = async () => {
     }
 
     console.log('\n📝 Backend API is ready for helpful button functionality!');
-    console.log('   Endpoint: PUT http://localhost:5000/api/interviews/:id/helpful');
+    console.log('   Endpoint: PUT ${process.env.BACKEND_URL}/api/interviews/:id/helpful');
     
   } catch (error) {
     console.error('Error:', error.message);

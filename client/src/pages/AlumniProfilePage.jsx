@@ -32,7 +32,7 @@ const AlumniProfilePage = () => {
       };
 
       const { data } = await axios.get(
-        `${process.env.REACT_APP_API_URL || "http://localhost:5000"}/api/profile/alumni`,
+        `${process.env.REACT_APP_API_URL || "${process.env.BACKEND_URL}"}/api/profile/alumni`,
         config
       );
 
@@ -105,7 +105,7 @@ const AlumniProfilePage = () => {
       };
 
       const { data } = await axios.post(
-        `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/profile/upload-avatar`,
+        `${process.env.REACT_APP_API_URL || '${process.env.BACKEND_URL}'}/api/profile/upload-avatar`,
         formData,
         config
       );
@@ -148,7 +148,7 @@ const AlumniProfilePage = () => {
       };
 
       await axios.delete(
-        `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/profile/avatar`,
+        `${process.env.REACT_APP_API_URL || '${process.env.BACKEND_URL}'}/api/profile/avatar`,
         config
       );
 

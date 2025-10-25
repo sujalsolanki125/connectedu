@@ -26,7 +26,7 @@ const Navbar = () => {
 
         const endpoint = userInfo.role === 'student' ? '/api/profile/student' : '/api/profile/alumni';
         const { data } = await axios.get(
-          `${process.env.REACT_APP_API_URL || "http://localhost:5000"}${endpoint}`,
+          `${process.env.REACT_APP_API_URL || "${process.env.BACKEND_URL}"}${endpoint}`,
           config
         );
 

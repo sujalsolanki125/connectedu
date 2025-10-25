@@ -21,7 +21,7 @@ const BookingManagement = ({ isOpen, onClose, workshop, onBookingsUpdated }) => 
       const token = localStorage.getItem('token');
       
       const response = await axios.put(
-        `http://localhost:5000/api/alumni-features/workshop/${workshop._id}/booking/${bookingId}`,
+        `${process.env.BACKEND_URL}/api/alumni-features/workshop/${workshop._id}/booking/${bookingId}`,
         { 
           status: 'Confirmed',
           meetingLink: meetingLink || workshop.meetingLink
@@ -65,7 +65,7 @@ const BookingManagement = ({ isOpen, onClose, workshop, onBookingsUpdated }) => 
       const token = localStorage.getItem('token');
       
       const response = await axios.put(
-        `http://localhost:5000/api/alumni-features/workshop/${workshop._id}/booking/${bookingId}`,
+        `${process.env.BACKEND_URL}/api/alumni-features/workshop/${workshop._id}/booking/${bookingId}`,
         { status: 'Cancelled' },
         {
           headers: {
@@ -107,7 +107,7 @@ const BookingManagement = ({ isOpen, onClose, workshop, onBookingsUpdated }) => 
       const token = localStorage.getItem('token');
       
       const response = await axios.patch(
-        `http://localhost:5000/api/alumni-features/workshop/${workshop._id}/meeting-link`,
+        `${process.env.BACKEND_URL}/api/alumni-features/workshop/${workshop._id}/meeting-link`,
         { meetingLink },
         {
           headers: {
@@ -135,7 +135,7 @@ const BookingManagement = ({ isOpen, onClose, workshop, onBookingsUpdated }) => 
       const token = localStorage.getItem('token');
       
       await axios.patch(
-        `http://localhost:5000/api/alumni-features/workshop/${workshop._id}/complete`,
+        `${process.env.BACKEND_URL}/api/alumni-features/workshop/${workshop._id}/complete`,
         {},
         {
           headers: {

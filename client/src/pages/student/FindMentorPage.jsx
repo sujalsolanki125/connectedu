@@ -40,8 +40,8 @@ const FindMentorPage = () => {
 
       // Fetch alumni and leaderboard in parallel
       const [alumniRes, leaderboardRes] = await Promise.all([
-        axios.get('http://localhost:5000/api/users/alumni', config),
-        axios.get('http://localhost:5000/api/leaderboard?limit=1000', config),
+        axios.get('${process.env.BACKEND_URL}/api/users/alumni', config),
+        axios.get('${process.env.BACKEND_URL}/api/leaderboard?limit=1000', config),
       ]);
 
       const alumniData = alumniRes.data || [];
@@ -72,7 +72,7 @@ const FindMentorPage = () => {
       const token = localStorage.getItem('token') || userInfo?.token;
       const config = { headers: { Authorization: `Bearer ${token}` } };
       
-      const response = await axios.get('http://localhost:5000/api/mentorship-requests/student', config);
+      const response = await axios.get('${process.env.BACKEND_URL}/api/mentorship-requests/student', config);
       
       // Create a Set of alumni IDs who have pending requests
       const pendingAlumniIds = new Set(
@@ -147,7 +147,7 @@ const FindMentorPage = () => {
       const config = { headers: { Authorization: `Bearer ${token}` } };
 
       await axios.post(
-        'http://localhost:5000/api/mentorship-requests',
+        '${process.env.BACKEND_URL}/api/mentorship-requests',
         {
           mentorId: selectedAlumni._id,
           message: requestMessage,

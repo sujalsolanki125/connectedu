@@ -32,7 +32,7 @@ const BookWorkshopModal = ({ isOpen, onClose, workshop, onBookingSuccess }) => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.post(
-        `http://localhost:5000/api/alumni-features/workshop/${workshop._id}/book`,
+        `${process.env.BACKEND_URL}/api/alumni-features/workshop/${workshop._id}/book`,
         { notes: formData.notes },
         {
           headers: {

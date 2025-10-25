@@ -18,7 +18,7 @@ const StudentDashboard = () => {
 
   const fetchMyLeaderboardStats = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/leaderboard/me', {
+      const response = await fetch('${process.env.BACKEND_URL}/api/leaderboard/me', {
         headers: {
           Authorization: `Bearer ${userInfo.token}`,
         },

@@ -26,7 +26,7 @@ const ExperienceList = () => {
       
       
       const response = await axios.get(
-        'http://localhost:5000/api/alumni-features/my-interview-experiences',
+        '${process.env.BACKEND_URL}/api/alumni-features/my-interview-experiences',
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -54,7 +54,7 @@ const ExperienceList = () => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.delete(
-        `http://localhost:5000/api/alumni-features/interview-experience/${experienceId}`,
+        `${process.env.BACKEND_URL}/api/alumni-features/interview-experience/${experienceId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 

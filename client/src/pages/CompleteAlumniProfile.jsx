@@ -81,7 +81,7 @@ const CompleteAlumniProfile = () => {
       };
 
       const { data } = await axios.get(
-        `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/profile/alumni`,
+        `${process.env.REACT_APP_API_URL || '${process.env.BACKEND_URL}'}/api/profile/alumni`,
         config
       );
 
@@ -146,7 +146,7 @@ const CompleteAlumniProfile = () => {
       };
 
       const { data } = await axios.put(
-        `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/profile/alumni`,
+        `${process.env.REACT_APP_API_URL || '${process.env.BACKEND_URL}'}/api/profile/alumni`,
         profileData,
         config
       );

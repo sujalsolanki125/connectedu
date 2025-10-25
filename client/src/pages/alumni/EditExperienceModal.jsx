@@ -131,7 +131,7 @@ const EditExperienceModal = ({ isOpen, onClose, experience, onExperienceUpdated 
     try {
       const token = localStorage.getItem('token');
       const response = await axios.put(
-        `http://localhost:5000/api/alumni-features/interview-experience/${experience._id}`,
+        `${process.env.BACKEND_URL}/api/alumni-features/interview-experience/${experience._id}`,
         formData,
         {
           headers: {

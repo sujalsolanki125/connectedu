@@ -18,7 +18,7 @@ const FeedbackList = () => {
       setLoading(true);
       const token = localStorage.getItem('token');
       const response = await axios.get(
-        'http://localhost:5000/api/alumni-features/my-feedback',
+        '${process.env.BACKEND_URL}/api/alumni-features/my-feedback',
         {
           headers: {
             Authorization: `Bearer ${token}`

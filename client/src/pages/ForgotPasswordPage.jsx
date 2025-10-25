@@ -29,7 +29,7 @@ const ForgotPasswordPage = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/forgot-password', {
+      const response = await axios.post('${process.env.BACKEND_URL}/api/auth/forgot-password', {
         email,
       });
 
@@ -68,7 +68,7 @@ const ForgotPasswordPage = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/reset-password', {
+      const response = await axios.post('${process.env.BACKEND_URL}/api/auth/reset-password', {
         email,
         otp,
         newPassword,
@@ -95,7 +95,7 @@ const ForgotPasswordPage = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/resend-reset-otp', {
+      const response = await axios.post('${process.env.BACKEND_URL}/api/auth/resend-reset-otp', {
         email,
       });
       setSuccess(response.data.message);

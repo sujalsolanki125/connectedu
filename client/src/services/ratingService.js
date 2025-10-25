@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api/ratings';
+const API_URL = '${process.env.BACKEND_URL}/api/ratings';
 
 // Helper function to get auth config
 const getAuthConfig = () => {

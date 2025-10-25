@@ -22,7 +22,7 @@ const EmailVerificationPage = () => {
     setSuccess('');
 
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/verify-email', {
+      const response = await axios.post('${process.env.BACKEND_URL}/api/auth/verify-email', {
         email,
         token: verificationCode.trim(),
       });
@@ -54,7 +54,7 @@ const EmailVerificationPage = () => {
     setSuccess('');
 
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/resend-verification', {
+      const response = await axios.post('${process.env.BACKEND_URL}/api/auth/resend-verification', {
         email,
       });
 

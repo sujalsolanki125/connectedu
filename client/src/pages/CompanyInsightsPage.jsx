@@ -35,7 +35,7 @@ const CompanyInsightsPage = () => {
       setError('');
       const token = localStorage.getItem('token');
       
-      const response = await axios.get('http://localhost:5000/api/company-insights', {
+      const response = await axios.get('${process.env.BACKEND_URL}/api/company-insights', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -151,7 +151,7 @@ const CompanyInsightsPage = () => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.post(
-        `http://localhost:5000/api/company-insights/${selectedInsight._id}/rate`,
+        `${process.env.BACKEND_URL}/api/company-insights/${selectedInsight._id}/rate`,
         { rating, comment: ratingComment },
         {
           headers: {
@@ -191,7 +191,7 @@ const CompanyInsightsPage = () => {
     try {
       const token = localStorage.getItem('token');
       await axios.delete(
-        `http://localhost:5000/api/company-insights/${insightId}`,
+        `${process.env.BACKEND_URL}/api/company-insights/${insightId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

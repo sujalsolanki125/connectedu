@@ -32,7 +32,7 @@ const LoginPage = () => {
     setLoading(true);
 
     try {
-      const { data } = await axios.post('http://localhost:5000/api/auth/login', {
+      const { data } = await axios.post(`${process.env.BACKEND_URL}/api/auth/login`, {
         email,
         password,
       });

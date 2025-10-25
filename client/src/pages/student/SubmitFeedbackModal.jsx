@@ -33,7 +33,7 @@ const SubmitFeedbackModal = ({ isOpen, onClose, booking, onFeedbackSubmitted }) 
     try {
       const token = localStorage.getItem('token');
       await axios.post(
-        `http://localhost:5000/api/alumni-features/workshop/${booking.workshop._id}/feedback`,
+        `${process.env.BACKEND_URL}/api/alumni-features/workshop/${booking.workshop._id}/feedback`,
         {
           rating: formData.rating,
           comment: formData.comment.trim()

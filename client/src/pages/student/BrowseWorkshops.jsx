@@ -35,7 +35,7 @@ const BrowseWorkshops = () => {
       setLoading(true);
       const token = localStorage.getItem('token');
       const response = await axios.get(
-        'http://localhost:5000/api/alumni-features/workshops',
+        '${process.env.BACKEND_URL}/api/alumni-features/workshops',
         {
           headers: {
             Authorization: `Bearer ${token}`

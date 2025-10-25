@@ -83,7 +83,7 @@ const checkAlumniAuth = async () => {
     console.log('\n🧪 API TEST COMMAND:');
     console.log('─'.repeat(60));
     console.log('Test the API with this curl command:\n');
-    console.log(`curl -X GET "http://localhost:5000/api/alumni-features/my-workshops" \\`);
+    console.log(`curl -X GET "${process.env.BACKEND_URL}/api/alumni-features/my-workshops" \\`);
     console.log(`  -H "Authorization: Bearer ${token}"`);
 
     console.log('\n' + '='.repeat(60));

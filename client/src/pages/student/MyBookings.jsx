@@ -20,7 +20,7 @@ const MyBookings = () => {
       setLoading(true);
       const token = localStorage.getItem('token');
       const response = await axios.get(
-        'http://localhost:5000/api/alumni-features/my-bookings',
+        '${process.env.BACKEND_URL}/api/alumni-features/my-bookings',
         {
           headers: {
             Authorization: `Bearer ${token}`

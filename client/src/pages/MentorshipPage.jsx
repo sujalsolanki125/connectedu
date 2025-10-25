@@ -42,7 +42,7 @@ const MentorshipPage = () => {
     try {
       const token = localStorage.getItem('token') || userInfo?.token;
       const config = { headers: { Authorization: `Bearer ${token}` } };
-      const response = await axios.get('http://localhost:5000/api/mentorship-requests/student', config);
+      const response = await axios.get('${process.env.BACKEND_URL}/api/mentorship-requests/student', config);
       setRequests(response.data);
     } catch (error) {
       // Error handled silently
@@ -56,7 +56,7 @@ const MentorshipPage = () => {
     try {
       const token = localStorage.getItem('token') || userInfo?.token;
       const config = { headers: { Authorization: `Bearer ${token}` } };
-      const response = await axios.get(`http://localhost:5000/api/users/${id}`, config);
+      const response = await axios.get(`${process.env.BACKEND_URL}/api/users/${id}`, config);
       setSelectedMentor(response.data);
       setShowRequestModal(true);
     } catch (error) {
@@ -78,7 +78,7 @@ const MentorshipPage = () => {
       const config = { headers: { Authorization: `Bearer ${token}` } };
       
       const response = await axios.post(
-        'http://localhost:5000/api/mentorship-requests',
+        '${process.env.BACKEND_URL}/api/mentorship-requests',
         {
           alumniId: selectedMentor._id,
           requestType,

@@ -107,7 +107,7 @@ const CreateCompanyInsight = () => {
       };
 
       const response = await axios.post(
-        'http://localhost:5000/api/company-insights',
+        '${process.env.BACKEND_URL}/api/company-insights',
         processedData,
         {
           headers: {

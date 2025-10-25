@@ -23,9 +23,9 @@ const LeaderboardPage = () => {
         const token = localStorage.getItem('token') || userInfo?.token;
         const config = { headers: { Authorization: `Bearer ${token}` } };
         const [lbRes, meRes, topRes] = await Promise.all([
-          axios.get('http://localhost:5000/api/leaderboard?limit=100', config),
-          axios.get('http://localhost:5000/api/leaderboard/me', config),
-          axios.get('http://localhost:5000/api/leaderboard/top-contributors?limit=4', config),
+          axios.get('${process.env.BACKEND_URL}/api/leaderboard?limit=100', config),
+          axios.get('${process.env.BACKEND_URL}/api/leaderboard/me', config),
+          axios.get('${process.env.BACKEND_URL}/api/leaderboard/top-contributors?limit=4', config),
         ]);
         // Server already enforces alumni-only. Avoid over-filtering on the client
         // which could hide valid results if role casing differs.

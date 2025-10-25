@@ -31,7 +31,7 @@ const BrowseExperiences = () => {
       setLoading(true);
       const token = localStorage.getItem('token');
       const response = await axios.get(
-        'http://localhost:5000/api/alumni-features/interview-experiences',
+        '${process.env.BACKEND_URL}/api/alumni-features/interview-experiences',
         {
           headers: {
             Authorization: `Bearer ${token}`
@@ -86,7 +86,7 @@ const BrowseExperiences = () => {
     try {
       const token = localStorage.getItem('token');
       await axios.post(
-        `http://localhost:5000/api/alumni-features/interview-experience/${experienceId}/helpful`,
+        `${process.env.BACKEND_URL}/api/alumni-features/interview-experience/${experienceId}/helpful`,
         {},
         {
           headers: {

@@ -55,7 +55,7 @@ const AlumniDashboard = () => {
           headers: { Authorization: `Bearer ${token}` }
         };
 
-        const response = await axios.get('http://localhost:5000/api/profile/me', config);
+        const response = await axios.get('${process.env.BACKEND_URL}/api/profile/me', config);
         setAlumniProfile(response.data);
       } catch (error) {
         // Error handled silently

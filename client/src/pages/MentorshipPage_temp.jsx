@@ -49,7 +49,7 @@ const FindYourMentorPage = () => {
   const fetchAlumni = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('http://localhost:5000/api/users/alumni', config);
+      const response = await axios.get('${process.env.BACKEND_URL}/api/users/alumni', config);
       setAlumni(response.data);
       setFilteredAlumni(response.data);
       
@@ -69,7 +69,7 @@ const FindYourMentorPage = () => {
       const requests = {};
       for (const alum of alumniList) {
         const response = await axios.get(
-          `http://localhost:5000/api/mentorship-requests/check/${alum._id}`,
+          `${process.env.BACKEND_URL}/api/mentorship-requests/check/${alum._id}`,
           config
         );
         requests[alum._id] = response.data.hasRequest;
@@ -122,7 +122,7 @@ const FindYourMentorPage = () => {
     try {
       setSubmitting(true);
       await axios.post(
-        'http://localhost:5000/api/mentorship-requests',
+        '${process.env.BACKEND_URL}/api/mentorship-requests',
         {
           alumniId: selectedAlumni._id,
           requestType,

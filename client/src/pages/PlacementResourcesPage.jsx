@@ -65,7 +65,7 @@ const PlacementResourcesPage = () => {
         },
       };
 
-      const response = await axios.get('http://localhost:5000/api/resources', config);
+      const response = await axios.get('${process.env.BACKEND_URL}/api/resources', config);
       
       // For alumni, filter to show only their uploads
       // For students, show all verified resources
@@ -177,7 +177,7 @@ const PlacementResourcesPage = () => {
         },
       };
 
-      const response = await axios.post('http://localhost:5000/api/resources', uploadData, config);
+      const response = await axios.post('${process.env.BACKEND_URL}/api/resources', uploadData, config);
 
       // Show success message
       setUploadMessage(response.data.message || 'Thank you! Your resource has been submitted for review.');
@@ -252,7 +252,7 @@ const PlacementResourcesPage = () => {
       };
 
       await axios.put(
-        `http://localhost:5000/api/resources/${selectedResource._id}`,
+        `${process.env.BACKEND_URL}/api/resources/${selectedResource._id}`,
         resourceData,
         config
       );
@@ -277,7 +277,7 @@ const PlacementResourcesPage = () => {
           },
         };
 
-        await axios.delete(`http://localhost:5000/api/resources/${id}`, config);
+        await axios.delete(`${process.env.BACKEND_URL}/api/resources/${id}`, config);
 
         alert('Resource deleted successfully!');
         fetchMyResources();
@@ -332,7 +332,7 @@ const PlacementResourcesPage = () => {
       const token = userInfo.token;
       
       // Use the proxy download endpoint that handles filename properly
-      const downloadUrl = `http://localhost:5000/api/resources/${resource._id}/download-file`;
+      const downloadUrl = `${process.env.BACKEND_URL}/api/resources/${resource._id}/download-file`;
       
       // Add authorization header via fetch and blob download
       const response = await fetch(downloadUrl, {
@@ -415,7 +415,7 @@ const PlacementResourcesPage = () => {
       };
 
       await axios.post(
-        `http://localhost:5000/api/resources/${resourceId}/rate`,
+        `${process.env.BACKEND_URL}/api/resources/${resourceId}/rate`,
         { rating },
         config
       );
